@@ -5,6 +5,10 @@ const cors = require('cors');
 
 const {graphqlHTTP} = require('express-graphql');
 
+const graphqlSchema = require('./graphql/schema');
+
+const graphqlResolver = require('./graphql/resolvers');
+
 const config = require('./config/config.json');
 
 const app = express();
@@ -13,14 +17,14 @@ app.use(bodyParse.json());
 
 app.use(cors());
 
-// graphql
-// app.use(
-//   '/graphql',
-//   graphqlHTTP,
-//   schema: // ,
-//   rootValue: //
-//   graphiql: true,
-// )
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema: graphqlSchema,
+    rootValue: graphqlResolver,
+    graphiql: true,
+  })
+)
 
 // Llamo a enviroments segun el ambiente que esté
 const enviroment = require('./config/config').config();
